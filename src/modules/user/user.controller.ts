@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { wrapperResponse } from '../../utils';
 
 @Controller('user')
 export class UserController {
@@ -10,6 +11,11 @@ export class UserController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Get('info')
+  findUserByToken(@Req() req) {
+    return wrapperResponse(this.userService.findByUsername(req.user.username), '获取用户信息成功');
   }
 
   @Get()
