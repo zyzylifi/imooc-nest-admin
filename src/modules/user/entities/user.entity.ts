@@ -11,9 +11,9 @@ export class User {
     @Column()
     password: string;
     @Column()
-    role: string;
+    roles: string;
     @Column()
-    nickname: string;
+    realName: string;
     @Column()
     active: number;
 }

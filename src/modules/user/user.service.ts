@@ -14,8 +14,8 @@ export class UserService {
     const user = new User();
     user.username = createUserDto.username;
     user.password = createUserDto.password;
-    user.nickname = createUserDto.nickname || createUserDto.username;
-    user.role = createUserDto.role;
+    user.realName = createUserDto.realName || createUserDto.username;
+    user.roles = createUserDto.roles;
     user.avatar = createUserDto.avatar;
     user.active = 1;
     return this.userRepository.save(user);

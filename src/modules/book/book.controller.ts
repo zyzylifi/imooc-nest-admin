@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request,UploadedFile, UseInterceptors, ParseFilePipeBuilder } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { wrapperCountResponse,wrapperResponse } from '../../utils';
 
 @Controller('book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
-  @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.bookService.create(createBookDto);
-  }
-
   @Get()
-  findAll() {
-    return this.bookService.findAll();
+  getBookList(@Query() params, @Request() request) {
+    const { user: { userid } } = request;
+    return wrapperCountResponse(
+      this.bookService.getBookList(params, userid),
+      this.bookService.countBookList(params, userid),
+      '获取图书列表成功',
+    );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookService.findOne(+id);
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile(
+    new ParseFilePipeBuilder().addFileTypeValidator({
+      fileType: 'epub',
+    }).build(),
+  ) file: Express.Multer.File) {
+    return wrapperResponse(
+      this.bookService.uploadBook(file),
+      '上传文件成功',
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.bookService.update(+id, updateBookDto);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.bookService.findOne(+id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bookService.remove(+id);
-  }
+  
 }
