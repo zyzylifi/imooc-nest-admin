@@ -58,6 +58,7 @@ export function parseContentOpf(unzipPath, filePath, fileName) {
     return {
       title,
       creator,
+      author: creator,
       language,
       publisher,
       cover,

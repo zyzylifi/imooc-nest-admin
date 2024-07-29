@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request,UploadedFile, UseInterceptors, ParseFilePipeBuilder } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request,UploadedFile, UseInterceptors, ParseFilePipeBuilder, ParseIntPipe,Put } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -19,6 +19,14 @@ export class BookController {
     );
   }
 
+  @Get(':id')
+  getBook(@Param('id', ParseIntPipe) id) {
+    return wrapperResponse(
+      this.bookService.getBook(id),
+      '查询电子书成功',
+    );
+  }
+
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile(
@@ -32,10 +40,29 @@ export class BookController {
     );
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.bookService.findOne(+id);
-  // }
+  @Post()
+  insertBook(@Body() body) {
+    return wrapperResponse(
+      this.bookService.addBook(body),
+      '新增电子书成功',
+    )
+  }
+
+  @Put()
+  updateBook(@Body() body) {
+    return wrapperResponse(
+      this.bookService.updateBook(body),
+      '更新电子书成功',
+    );
+  }
+
+  @Delete()
+  deleteBook(@Body() id) {
+    return wrapperResponse(
+      this.bookService.deleteBook(+id.id),
+      '删除电子书成功',
+    )
+  }
 
   
 }

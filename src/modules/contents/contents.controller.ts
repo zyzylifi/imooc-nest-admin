@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseFilePipeBuilder,
+  ParseIntPipe,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ContentsService } from './contents.service';
-import { CreateContentDto } from './dto/create-content.dto';
-import { UpdateContentDto } from './dto/update-content.dto';
+import { wrapperCountResponse, wrapperResponse } from '../../utils';
 
 @Controller('contents')
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
-  @Post()
-  create(@Body() createContentDto: CreateContentDto) {
-    return this.contentsService.create(createContentDto);
-  }
-
   @Get()
-  findAll() {
-    return this.contentsService.findAll();
+  getContentsList(@Query() params) {
+    return wrapperResponse(
+      null,
+      '获取目录列表成功',
+    );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contentsService.findOne(+id);
+  @Post()
+  insertContents(@Body() body) {
+    return wrapperResponse(
+      this.contentsService.addContents(body),
+      '新增目录成功',
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {
-    return this.contentsService.update(+id, updateContentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contentsService.remove(+id);
+  @Delete()
+  deleteContents(@Body() body) {
+    console.log(body);
+    return wrapperResponse(
+      this.contentsService.deleteContents(body.fileName),
+      '删除电子书目录成功',
+    );
   }
 }

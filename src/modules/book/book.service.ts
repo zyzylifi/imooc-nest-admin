@@ -70,13 +70,61 @@ export class BookService {
     });
   }
 
+  getBook(id) {
+    const sql = `SELECT * FROM book WHERE id="${id}"`;
+    return this.bookRepository.query(sql);
+  }
+
   parseBook(bookPath, file) {
     const epub = new EpubBook(bookPath, file);
     return epub.parse();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  addBook(params) {
+    const { title, author, fileName, category, categoryText, cover, language, publisher, rootFile } = params;
+    const insertSql = `INSERT INTO book(
+        fileName,
+        cover,
+        title,
+        author,
+        publisher,
+        bookId,
+        category,
+        categoryText,
+        language,
+        rootFile
+      ) VALUES(
+        '${fileName}',
+        '${cover}',
+        '${title}',
+        '${author}',
+        '${publisher}',
+        '${fileName}',
+        '${category}',
+        '${categoryText}',
+        '${language}',
+        '${rootFile}'
+      )`;
+    return this.bookRepository.query(insertSql);
+    
+  }
+
+  async updateBook(params) {
+    const { id, title, author, category, categoryText, language, publisher } = params;
+    const setSql = [];
+    if (title) {
+      setSql.push(`title="${title}"`);
+    }
+    if (author) {
+      setSql.push(`author="${author}"`);
+    }
+    const updateSql = `UPDATE book SET ${setSql.join(',')} WHERE id=${id}`;
+    return this.bookRepository.query(updateSql);
+  }
+
+  deleteBook(id: number) {
+    const sql = `DELETE FROM book WHERE id = ${id}`;
+    return this.bookRepository.query(sql);
   }
 
   
