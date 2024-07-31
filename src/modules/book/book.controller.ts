@@ -31,7 +31,7 @@ export class BookController {
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile(
     new ParseFilePipeBuilder().addFileTypeValidator({
-      fileType: '/epub/',
+      fileType: 'epub',
     }).build(),
   ) file: Express.Multer.File) {
     return wrapperResponse(

@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as os from 'os';
 import * as fse from 'fs-extra';
 import { unzip, parseRootFile, parseContentOpf, copyCoverImage, copyUnzipBook } from './epub-parse';
-
+import { Logger } from '@nestjs/common';
 const TEMP_PATH = '.vben/tmp-book';
 
 class EpubBook {
@@ -39,7 +39,7 @@ class EpubBook {
       rootFile,
       this.fileName,
     );
-    console.log(1)
+    Logger.log(bookData,'bookData')
     // 5.拷贝电子书封面图片
     const cover = copyCoverImage(bookData, tmpDir);
     bookData.cover = cover;

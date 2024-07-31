@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module,Logger } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
@@ -25,6 +25,7 @@ const { username, password } = getMysqlUsernameAndPassword();
     // synchronize: true,
   }),UserModule,AuthModule,BookModule,ContentsModule,MenuModule,RoleModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,Logger],
+  exports: [Logger],
 })
 export class AppModule {}
