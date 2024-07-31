@@ -1,17 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Req, Query, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { wrapperResponse } from '../../utils';
+import { query } from 'express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   @Get('info')
   findUserByToken(@Req() req) {
@@ -19,8 +15,24 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAllUser(@Query() query) {
+    return wrapperResponse(this.userService.getUserList(query),'获取用户列表成功')
+  }
+
+  @Put()
+  updateUser(@Body() body) {
+    return wrapperResponse(
+      this.userService.update(body),
+      '编辑用户成功',
+    );
+  }
+
+  @Post()
+  create(@Body() body) {
+    return wrapperResponse(
+      this.userService.createUser(body),
+      '新增用户成功',
+    );
   }
 
   @Get(':id')
@@ -28,13 +40,12 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete()
+  remove(@Body() body) {
+    console.log(body)
+    return wrapperResponse(
+      this.userService.remove(+body.id),
+      '删除用户成功',
+    )
   }
 }
