@@ -55,7 +55,6 @@ export class BookService {
     }
     const sql = `select * from book ${where} limit ${pageSize} offset ${(page - 1) * pageSize}`;
     const res = await this.bookRepository.query(sql);
-    // console.log(res)
     return res
   }
 
@@ -73,14 +72,11 @@ export class BookService {
       where += ` AND categoryText IN (${categoryAuth.join(',')})`;
     }
     const sql = `select count(*) as count from book ${where}`;
-    console.log(sql);
     return this.bookRepository.query(sql);
   }
 
   uploadBook(file) {
-    console.log(file);
-    // const destDir = '/opt/homebrew/var/www/upload';
-    const destDir = '/实战video';
+    const destDir = '/opt/homebrew/var/www/upload';
     const destPath = path.resolve(destDir, file.originalname);
     fs.writeFileSync(destPath, file.buffer);
     return this.parseBook(destPath, file).then((data) => {

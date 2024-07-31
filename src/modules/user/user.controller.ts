@@ -42,7 +42,6 @@ export class UserController {
 
   @Delete()
   remove(@Body() body) {
-    console.log(body)
     return wrapperResponse(
       this.userService.remove(+body.id),
       '删除用户成功',

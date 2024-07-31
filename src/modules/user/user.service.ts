@@ -46,7 +46,6 @@ export class UserService {
   }
 
   update(params) {
-    // console.log(params);
     const { username, nickname, active, role } = params;
     const setSql = [];
     if (nickname) {

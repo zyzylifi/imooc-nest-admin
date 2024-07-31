@@ -37,7 +37,6 @@ export class ContentsController {
 
   @Delete()
   deleteContents(@Body() body) {
-    console.log(body);
     return wrapperResponse(
       this.contentsService.deleteContents(body.fileName),
       '删除电子书目录成功',

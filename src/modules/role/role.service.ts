@@ -24,7 +24,6 @@ export class RoleService {
     const role = new Role();
     role.name = params.name;
     role.remark = params.remark;
-    console.log(role);
     return this.roleRepository.save(role);
   }
 
