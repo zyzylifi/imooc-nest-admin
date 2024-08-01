@@ -3,7 +3,9 @@ import * as os from 'os';
 import * as fse from 'fs-extra';
 import { unzip, parseRootFile, parseContentOpf, copyCoverImage, copyUnzipBook } from './epub-parse';
 import { Logger } from '@nestjs/common';
+import { NGINX_PATH } from '../../utils/const';
 const TEMP_PATH = '.vben/tmp-book';
+
 
 class EpubBook {
   private bookPath: string;
@@ -39,13 +41,17 @@ class EpubBook {
       rootFile,
       this.fileName,
     );
-    Logger.log(bookData,'bookData')
+    console.log(bookData,'bookData')
     // 5.拷贝电子书封面图片
-    const cover = copyCoverImage(bookData, tmpDir);
-    bookData.cover = cover;
-    console.log(bookData)
+    // const cover = copyCoverImage(bookData, tmpDir);
+    // bookData.cover = cover;
     // 6.拷贝解压后电子书
+    const bookDir = path.resolve(NGINX_PATH, 'book', );
+    console.log(tmpDir)
+    const coverPathname = bookData.cover.replace(tmpDir + '/', '');
     copyUnzipBook(tmpUnzipDir, tmpUnzipDirName);
+    bookData.cover = bookDir+'/'+coverPathname;
+    console.log(bookData.cover);
     // 7.删除临时文件
     fse.removeSync(tmpFile);
     fse.removeSync(tmpUnzipDir);
