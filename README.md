@@ -1,4 +1,4 @@
-# Vue3+NestJS 全栈开发企业级管理后台
+# Vue3+NestJS 全栈开发管理后台
 
 ## 代码结构
 ```bash
