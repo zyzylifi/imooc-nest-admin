@@ -22,8 +22,7 @@
 
 ### SQL 脚本
 
-- 1-7章使用：/sql/vben-book.sql
-- 8-10章使用：/sql/vben-book-dev(chapter9).sql
+/sql/ibook.sql
 
 ### 电子书链接
 - 什么算epub电子书？可参考：
